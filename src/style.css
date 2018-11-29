@@ -1,0 +1,68 @@
+body {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+}
+.tasklist {
+  padding-top: 2em;
+}
+
+.task.done label {
+  text-decoration: line-through;
+}
+
+.task.done {
+  background-color: lightgreen;
+}
+
+.task.todo {
+  background-color: lightgoldenrodyellow;
+}
+
+.description {
+  color: slategray;
+  font-style: italic;
+}
+
+.yellow-bg {
+  background-color: yellow;
+}
+
+.lblue-bg {
+  background-color: lightblue;
+}
+
+.form-box {
+  margin-top: 20px;
+}
+
+.bottom-gap {
+  margin-bottom: 10px;
+}
+
+.left-gap {
+  margin-left: 20px;
+}
+
+.in-table-dropdown {
+  padding: 5px 5px;
+  border-radius: .28571429rem;
+  width: 100%;
+  border: none;
+}
+
+
+.ui.table tfoot th {
+  font-weight: 900;
+}
+
+
+@media print
+{    
+  * {
+     overflow: visible !important; 
+   }
+  
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
