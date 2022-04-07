@@ -1,5 +1,6 @@
 {
-  "name": "vue-2.0-simple-routing-example",
+  "name": "DigiBooks",
+  "version": "0.9",
   "description": "A Vue.js project",
   "author": "Chris Fritz <chrisvfritz@gmail.com>",
   "private": true,

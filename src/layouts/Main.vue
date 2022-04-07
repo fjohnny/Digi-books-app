@@ -52,7 +52,7 @@
 
             <div class="bottom-gap"></div>
 
-            <button class="ui green button fluid" @click="$root.testEvent"> 
+            <button class="ui green button fluid" @click="$root.loadFile"> 
               <i class="icon upload"></i>Load
             </button>
             
