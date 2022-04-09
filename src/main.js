@@ -279,9 +279,13 @@ const app = new Vue({
     },
 
     getCategoryTitle(category) {
-      const res = this.categoryTitles[category];
-      console.log(category, { res });
-      return res;
+      //const res = this.categoryTitles[category];
+      const res = this.categoryTitles.find((c) => c[category]);
+      console.log({ res });
+      //console.log(category, { res });
+      //console.log(Object.keys(this.categoryTitles));
+      //console.log(this.categoryTitles);
+      return res[category];
     },
 
     importCSV() {
