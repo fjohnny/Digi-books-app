@@ -131,13 +131,13 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="t in $root.filteredTransactions">
+                        <tr v-for="t in $root.filteredTransactions" :key="t.id">
                           <td>{{t.date}}</td>
                           <td>{{t.description}}</td>
                           <td class="right aligned" v-if="t.credit != 0">{{t.credit.toLocaleString('en-US', {style: 'currency', currency: 'USD',})}}</td><td v-else></td>
                           <td class="right aligned" v-if="t.debit != 0">{{t.debit.toLocaleString('en-US', {style: 'currency', currency: 'USD',})}}</td><td v-else></td>
                           <td style="padding-right: 0px;">
-                            <select-category class="in-table-dropdown" toptext="UNCATEGORISED" :value="t.category" v-model="t.category" @changed="t.category = $event"></select-category>
+                            <select-category class="in-table-dropdown" toptext="UNCATEGORISED"  key="t.id" :value="t.category" v-model="t.category" @changed="t.category = $event"></select-category>
                           </td> 
                           <td style="padding: 0px;">   
                             <button class="ui compact icon button" @click="t.category = ''">

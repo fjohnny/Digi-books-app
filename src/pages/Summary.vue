@@ -30,14 +30,16 @@
                 <td class="right aligned" >{{$root.totalCategoryDebit('')}}</td>
               </tr>
 
-              <tr v-for="c in $root.categoriesCredit">
-                <td>{{c[0].toUpperCase() + c.substr(1)}}</td>
+              <tr v-for="c in $root.categoriesCredit" :key="c">
+                <!-- <td>{{c[0].toUpperCase() + c.substr(1)}}</td> -->
+                <td>{{$root.getCategoryTitle(c)}}</td>
                 <td class="right aligned" >{{$root.totalCategoryCredit(c)}}</td>
                 <td class="right aligned" >{{$root.totalCategoryDebit(c)}}</td>
               </tr>
 
-              <tr v-for="c in $root.categoriesDebit">
-                <td>{{c[0].toUpperCase() + c.substr(1)}}</td>
+              <tr v-for="c in $root.categoriesDebit" :key="c">
+                <!-- <td>{{c[0].toUpperCase() + c.substr(1)}}</td> -->
+                <td>{{$root.getCategoryTitle(c)}}</td>
                 <td class="right aligned" >{{$root.totalCategoryCredit(c)}}</td>
                 <td class="right aligned" >{{$root.totalCategoryDebit(c)}}</td>
               </tr>

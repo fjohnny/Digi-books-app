@@ -4,6 +4,7 @@ import { timingSafeEqual } from "crypto";
 
 Vue.component("select-category", {
   props: {
+    id: Math.random().toString(),
     value: null,
     toptext: String,
   },
@@ -14,8 +15,9 @@ Vue.component("select-category", {
         <option value="income">Income</option>
         <option disabled>──────────</option>
         <option value="rent">Rent and Outgoings</option>
-        <option value="materials">Materials</option>
+        <option value="materials">GFS, Parts & Materials</option>
         <option value="software">Software</option>
+        <option value="hardware">Hardware</option>
         <option value="utilities">Utitlies</option>
         <option value="maintenance">Maintenance</option>
         <option value="tools">Tools</option>
@@ -25,6 +27,9 @@ Vue.component("select-category", {
         <option value="insurance">Insurance</option>
         <option value="xpos">XPOS</option>
         <option value="fees">Bank Fees</option>
+        <option value="education">Education</option>
+        <option value="hosting">Hosting and Domains</option>
+        <option value="marketing">Marketing</option>
         <option value="tax">Taxation</option>
         <option value="other">Other</option>
         <option disabled>──────────</option>
@@ -43,6 +48,7 @@ const app = new Vue({
       "rent",
       "materials",
       "software",
+      "hardware",
       "utilities",
       "maintenance",
       "tools",
@@ -52,9 +58,34 @@ const app = new Vue({
       "insurance",
       "xpos",
       "fees",
+      "education",
+      "hosting",
+      "marketing",
       "tax",
       "wages",
       "private",
+    ],
+    categoryTitles: [
+      { income: "Income" },
+      { rent: "Rent" },
+      { materials: "Good for Sale, Part & Materials" },
+      { software: "Software" },
+      { hardware: "Hardware" },
+      { utilities: "Utilities" },
+      { maintenance: "Maintenance" },
+      { tools: "Tools" },
+      { stationary: "Stationary & Postage" },
+      { transport: "Car expenses & transport" },
+      { security: "Security" },
+      { insurance: "Insurance" },
+      { xpos: "Xpos" },
+      { fees: "Bank Fees" },
+      { education: "Education" },
+      { hosting: "Hosting and Domains" },
+      { marketing: "Marketing" },
+      { tax: "Tax" },
+      { wages: "Wages" },
+      { private: "Private expenses" },
     ],
     transactions: [
       {
@@ -247,6 +278,12 @@ const app = new Vue({
       }
     },
 
+    getCategoryTitle(category) {
+      const res = this.categoryTitles[category];
+      console.log(category, { res });
+      return res;
+    },
+
     importCSV() {
       var isLoading = this.csvLoading;
       isLoading.is = true;
@@ -259,6 +296,7 @@ const app = new Vue({
           data.forEach((t) => {
             if (t.t_amount > 0) {
               var newT = {
+                id: Math.random().toString(),
                 date: t.t_date,
                 description: t.t_desc,
                 credit: parseFloat(t.t_amount),
@@ -270,6 +308,7 @@ const app = new Vue({
               list.push(newT);
             } else {
               var newT = {
+                id: Math.random().toString(),
                 date: t.t_date,
                 description: t.t_desc,
                 credit: 0,
@@ -407,6 +446,7 @@ const app = new Vue({
           data.forEach((t) => {
             if (t.credit > 0) {
               var newT = {
+                id: Math.random().toString(),
                 date: t.date,
                 description: t.description,
                 credit: parseFloat(t.credit),
@@ -418,6 +458,7 @@ const app = new Vue({
               list.push(newT);
             } else {
               var newT = {
+                id: Math.random().toString(),
                 date: t.date,
                 description: t.description,
                 credit: 0,
