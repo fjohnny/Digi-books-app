@@ -208,7 +208,7 @@ const app = new Vue({
     creditOnly: false,
     uncategorisedOnly: false,
     descriptionLike: "",
-    catFilter: "",
+    catFilter: "all",
     action: "create",
     message: "Welcome",
     csvLoading: { is: false },
@@ -224,7 +224,7 @@ const app = new Vue({
     },
 
     filteredTransactions: function () {
-      console.log("Computing the filtered list");
+      //console.log("Computing the filtered list");
       return this.transactions.filter((item) => {
         return (
           // (!this.uncategorisedOnly || item.category == "") && //uncategorised filter
@@ -353,13 +353,11 @@ const app = new Vue({
     },
 
     getCategoryTitle(category) {
-      //const res = this.categoryTitles[category];
       const res = this.categoryTitles.find((c) => c[category]);
-      console.log({ res });
-      //console.log(category, { res });
-      //console.log(Object.keys(this.categoryTitles));
-      //console.log(this.categoryTitles);
-      return res[category];
+      if (res) {
+        return res[category];
+      }
+      return "???";
     },
 
     importCSV() {
@@ -367,10 +365,10 @@ const app = new Vue({
       isLoading.is = true;
       this.transactions = [];
       var list = this.transactions;
-      console.log("prepare to import - read the file");
+      //console.log("prepare to import - read the file");
       d3.csv("/CSVData_2019-2020.csv")
         .then(function (data) {
-          console.log("file read - start importing"); // [{"Hello": "world"}, …]
+          //console.log("file read - start importing"); // [{"Hello": "world"}, …]
           data.forEach((t) => {
             if (t.t_amount > 0) {
               var newT = {
@@ -382,7 +380,7 @@ const app = new Vue({
                 category: "",
                 isSelected: false,
               };
-              console.log(newT);
+              //console.log(newT);
               list.push(newT);
             } else {
               var newT = {
@@ -394,7 +392,7 @@ const app = new Vue({
                 category: "",
                 isSelected: false,
               };
-              console.log(newT);
+              //console.log(newT);
               list.push(newT);
             }
           });
@@ -410,7 +408,7 @@ const app = new Vue({
       var rows = this.transactions;
       var filename = "transactions.csv";
       var processRow = function (row) {
-        console.log("ROW - > " + row);
+        //console.log("ROW - > " + row);
         var finalVal = "";
         for (var j = 0; j < row.length; j++) {
           var innerValue = row[j] === null ? "" : row[j].toString();
@@ -422,7 +420,7 @@ const app = new Vue({
           if (j > 0) finalVal += ",";
           finalVal += result;
         }
-        console.log("FINAL - > " + finalVal);
+        //console.log("FINAL - > " + finalVal);
         return finalVal + "\n";
       };
 
@@ -517,10 +515,10 @@ const app = new Vue({
       isLoading.is = true;
       this.transactions = [];
       var list = this.transactions;
-      console.log("prepare to load - read the file");
+      //("prepare to load - read the file");
       d3.csv("/transactions.csv")
         .then(function (data) {
-          console.log("file read - start loading"); // [{"Hello": "world"}, …]
+          //console.log("file read - start loading"); // [{"Hello": "world"}, …]
           data.forEach((t) => {
             if (t.credit > 0) {
               var newT = {
