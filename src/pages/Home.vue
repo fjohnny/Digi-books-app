@@ -44,6 +44,11 @@
                                   </button>
                               </div>
                           </div>
+
+                          <div class="field" style="margin-top: 20px;">
+                            <label for="">Category:</label>
+                              <select-category-filter toptext="UNCATEGORISED" v-model="$root.catFilter" @changed="$root.catFilter = $event"></select-category-filter>
+                          </div>
                    
                         </form>
                     </div>
@@ -66,10 +71,10 @@
 
                         <div class="ui hidden divider"></div>
                         
-                        <div class="ui checkbox">
+                        <!-- <div class="ui checkbox">
                             <input type="checkbox" name="excreditOnlyample" v-model="$root.uncategorisedOnly">
                             <label>Uncategorised Only</label>
-                        </div>
+                        </div> -->
 
                     </div>
 
@@ -77,7 +82,7 @@
                     <div class="four wide column">
                         <form class="ui form">
                             <div class="field">
-                              <label for="">Category:</label>
+                              <label for="">Set Category:</label>
                               <select-category toptext="UNCATEGORISED" v-model="$root.selectedCategory" @changed="$root.selectedCategory = $event"></select-category>
                             </div>
 
@@ -147,6 +152,18 @@
                           <td><input type="checkbox" v-model="t.isSelected"></td>
                         </tr>
                       </tbody>
+                      <tfoot>
+                        <tr>
+                          <th></th>
+                          <th class="six wide"></th>
+                          <th class="right aligned">{{$root.totalFilteredCredits.toLocaleString('en-US', {style: 'currency', currency: 'USD',})}}</th>
+                          <th class="right aligned">{{$root.totalFilteredDebits.toLocaleString('en-US', {style: 'currency', currency: 'USD',})}}</th>
+
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </tfoot>
                   </table>
 
              

@@ -6,7 +6,7 @@
         <div class="ui sidebar visible inverted vertical menu left no-print">
           <!-- Logo -->
           <div class="ui logo item">
-            <b><i class="icon tasks purple"></i>Digi Books</b>
+            <b><i class="icon tasks purple"></i>Digi Books - v{{$root.version}}</b>
           </div>
           <!-- Header -->
           <div class="item">

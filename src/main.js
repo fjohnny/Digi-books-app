@@ -1,6 +1,7 @@
 import Vue from "vue";
 import routes from "./routes";
 import { timingSafeEqual } from "crypto";
+import { version } from "../package.json";
 
 Vue.component("select-category", {
   props: {
@@ -14,8 +15,8 @@ Vue.component("select-category", {
         <option selected value="">{{toptext}}</option>
         <option value="income">Income</option>
         <option disabled>──────────</option>
-        <option value="rent">Rent and Outgoings</option>
         <option value="materials">GFS, Parts & Materials</option>
+        <option value="rent">Rent and Outgoings</option>
         <option value="software">Software</option>
         <option value="hardware">Hardware</option>
         <option value="utilities">Utitlies</option>
@@ -23,6 +24,7 @@ Vue.component("select-category", {
         <option value="tools">Tools</option>
         <option value="stationary">Stationary</option>
         <option value="transport">Transport</option>
+        <option value="petrol">Petrol</option>
         <option value="security">Security</option>
         <option value="insurance">Insurance</option>
         <option value="xpos">XPOS</option>
@@ -31,6 +33,48 @@ Vue.component("select-category", {
         <option value="hosting">Hosting and Domains</option>
         <option value="marketing">Marketing</option>
         <option value="tax">Taxation</option>
+        <option value="contractors">Contractors</option>
+        <option value="other">Other</option>
+        <option disabled>──────────</option>
+        <option value="wages">Wages</option>
+        <option value="private">Private</option>
+      </select>  
+  `,
+});
+
+Vue.component("select-category-filter", {
+  props: {
+    id: Math.random().toString(),
+    value: null,
+    toptext: String,
+  },
+
+  template: `
+      <select :value="value" @input="$emit('changed',$event.target.value)">
+        <option selected value="all">ALL CATEGORIES</option>
+        <option value="">{{toptext}}</option>
+        <option disabled>──────────</option>
+        <option value="income">Income</option>
+        <option disabled>──────────</option>
+        <option value="materials">GFS, Parts & Materials</option>
+        <option value="rent">Rent and Outgoings</option>
+        <option value="software">Software</option>
+        <option value="hardware">Hardware</option>
+        <option value="utilities">Utitlies</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="tools">Tools</option>
+        <option value="stationary">Stationary</option>
+        <option value="transport">Transport</option>
+        <option value="petrol">Petrol</option>
+        <option value="security">Security</option>
+        <option value="insurance">Insurance</option>
+        <option value="xpos">XPOS</option>
+        <option value="fees">Bank Fees</option>
+        <option value="education">Education</option>
+        <option value="hosting">Hosting and Domains</option>
+        <option value="marketing">Marketing</option>
+        <option value="tax">Taxation</option>
+        <option value="contractors">Contractors</option>
         <option value="other">Other</option>
         <option disabled>──────────</option>
         <option value="wages">Wages</option>
@@ -45,8 +89,8 @@ const app = new Vue({
     currentRoute: window.location.pathname,
     categoriesCredit: ["income"],
     categoriesDebit: [
-      "rent",
       "materials",
+      "rent",
       "software",
       "hardware",
       "utilities",
@@ -54,6 +98,7 @@ const app = new Vue({
       "tools",
       "stationary",
       "transport",
+      "petrol",
       "security",
       "insurance",
       "xpos",
@@ -62,20 +107,22 @@ const app = new Vue({
       "hosting",
       "marketing",
       "tax",
+      "contractors",
       "wages",
       "private",
     ],
     categoryTitles: [
       { income: "Income" },
       { rent: "Rent" },
-      { materials: "Good for Sale, Part & Materials" },
-      { software: "Software" },
+      { materials: "Cost of Sales" },
+      { software: "Software & Subscriptions" },
       { hardware: "Hardware" },
       { utilities: "Utilities" },
-      { maintenance: "Maintenance" },
+      { maintenance: "Furniture & Maintenance" },
       { tools: "Tools" },
       { stationary: "Stationary & Postage" },
       { transport: "Car expenses & transport" },
+      { petrol: "Petrol" },
       { security: "Security" },
       { insurance: "Insurance" },
       { xpos: "Xpos" },
@@ -84,6 +131,7 @@ const app = new Vue({
       { hosting: "Hosting and Domains" },
       { marketing: "Marketing" },
       { tax: "Tax" },
+      { contractors: "Payments to Contractors" },
       { wages: "Wages" },
       { private: "Private expenses" },
     ],
@@ -160,10 +208,12 @@ const app = new Vue({
     creditOnly: false,
     uncategorisedOnly: false,
     descriptionLike: "",
+    catFilter: "",
     action: "create",
     message: "Welcome",
     csvLoading: { is: false },
     catSumm: "",
+    version: version,
   },
   computed: {
     ViewComponent() {
@@ -177,7 +227,8 @@ const app = new Vue({
       console.log("Computing the filtered list");
       return this.transactions.filter((item) => {
         return (
-          (!this.uncategorisedOnly || item.category == "") && //uncategorised filter
+          // (!this.uncategorisedOnly || item.category == "") && //uncategorised filter
+          (this.catFilter === "all" || item.category == this.catFilter) && //uncategorised filter
           (!this.creditOnly || item.credit != 0) && //credit filter
           (!this.debitOnly || item.debit != 0) && //debit filter
           (this.descriptionLike == "" ||
@@ -209,6 +260,28 @@ const app = new Vue({
         currency: "USD",
       });
     },
+
+    totalFilteredCredits() {
+      let total = 0;
+      this.filteredTransactions.forEach((t) => {
+        total = total + t.credit;
+      });
+      return total.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+    },
+
+    totalFilteredDebits() {
+      let total = 0;
+      this.filteredTransactions.forEach((t) => {
+        total = total + t.debit;
+      });
+      return total.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+    },
   },
   methods: {
     setAllCategories() {
@@ -217,19 +290,20 @@ const app = new Vue({
         selection = "UNCATEGORISED";
       }
 
-      if (
-        confirm(
-          `Category ${selection.toUpperCase()} will be applied to ${
-            this.filteredTransactions.length
-          } selected transactions. OK?`
-        )
-      ) {
-        this.filteredTransactions.forEach((t) => {
-          if (t.isSelected) {
-            t.category = this.selectedCategory;
-          }
-        });
-      }
+      // if (
+      //   confirm(
+      //     `Category ${selection.toUpperCase()} will be applied to ${
+      //       this.filteredTransactions.length
+      //     } selected transactions. OK?`
+      //   )
+      // ) {
+      this.filteredTransactions.forEach((t) => {
+        if (t.isSelected) {
+          t.category = this.selectedCategory;
+        }
+      });
+      this.allSelected = false;
+      // }
     },
 
     selectUndefined() {
@@ -496,6 +570,7 @@ const app = new Vue({
       this.filteredTransactions.forEach((t) => {
         t.isSelected = val;
       });
+      //this.allSelected = false;
     },
 
     debitOnly: function (val) {
@@ -512,7 +587,7 @@ const app = new Vue({
   },
 
   mounted() {
-    this.allSelected = true;
+    this.allSelected = false;
   },
 
   render(h) {
